@@ -7,6 +7,9 @@ const nunjucks = require("nunjucks");
 const urlencodedParser = express.urlencoded({ extended: false });
 const session = require('express-session');
 const res = require('express/lib/response');
+var fileUpload = require('express-fileupload');
+
+app.use(fileUpload({}));
 
 nunjucks.configure('static/templates', {
     autoescape: true,
@@ -50,7 +53,24 @@ async function getdata(query, login, pass) {
     db.close();
     return rows
 };
-
+async function create_playlist(query, author, avatar, description, name) {
+    let dataq = {
+        create: `INSERT INTO Playlist (id, author, avatar_path, description, name) VALUES (NULL, ?, ?, ?, ?)`,
+    }
+    let db = new sqlite3.Database('music-player.db');
+    var promise_playlist = new Promise(function (resolve, reject) {
+        db.run(dataq[query], [author, avatar, description, name], function (err) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve("OK");
+            }
+        });
+    });
+    let result = await promise_playlist;
+    db.close();
+    return result
+};
 async function registration(query, login, password, email) {
     let dataq = {
         registration: `INSERT INTO users (id, username, password, email) VALUES (NULL, ?, ?, ?)`,
@@ -79,19 +99,20 @@ async function registration(query, login, password, email) {
     let result = await promise_reg;
     db.close();
     return result
-}
+};
 
 app.get("/", urlencodedParser, (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
 app.post("/auth", urlencodedParser, (req, res) => {
-    password = req.body.pass;
-    username = req.body.username;
-    body__req = "authorization";
+    let password = req.body.pass;
+    let username = req.body.username;
+    let body__req = "authorization";
     getdata(body__req, username, password).then((rows) => {
         if (rows.length > 0) {
-            req.session.user_auth = true;
+            req.session.auth = true;
+            req.session.username = username;         
             res.redirect("player");
         } else if (rows.length == 0) {
             res.send('Ошибо4ка');
@@ -100,17 +121,16 @@ app.post("/auth", urlencodedParser, (req, res) => {
         console.log(err + " ТАКОГО ПОЛЬЗОВАТЕЛЯ НЕТ");
     });
 });
-
 app.post("/register", urlencodedParser, (req, res) => {
-    username = req.body.username;
-    password = req.body.pass;
-    password_confirm = req.body.pass_confirm;
-    email = req.body.email;
-    body__req = "registration";
+    let username = req.body.username;
+    let password = req.body.pass;
+    let password_confirm = req.body.pass_confirm;
+    let email = req.body.email;
+    let body__req = "registration";
     if (password === password_confirm) {
         console.log("Пароли совподают");
         registration(body__req, username, password, email).then((result) => {
-            res.send(result)
+            res.redirect("index.html");
         }, (err) => {
             res.send(err)
         })
@@ -124,7 +144,7 @@ app.get("/registration", urlencodedParser, (req, res) => {
 });
 
 app.use((req, res, next) => {
-    if (req.session.user_auth) {
+    if (req.session.auth) {
         next();
     } else {
         res.redirect("/");
@@ -132,13 +152,11 @@ app.use((req, res, next) => {
 });
 
 app.get("/player", urlencodedParser, (req, res) => {
-    body__req = "search";
+    let body__req = "search";
     getdata(body__req).then((rows) => {
-        console.log(rows);
         let datatemplate = {
             "data": rows
         }
-        console.log();
         res.render("player.njk", datatemplate);
     }, (err) => {
         console.log(err + " Ошибка при получении композиций");
@@ -146,12 +164,52 @@ app.get("/player", urlencodedParser, (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-    if (req.session.user_auth) {
-        delete req.session.user_auth;
+    if (req.session.auth) {
+        delete req.session.auth;
         res.redirect("/");
     } else {
         res.send("Вы не авторизованны");
     }
+});
+
+app.get("/create__playlist",  urlencodedParser, (req, res) => {
+    let body__req = "search";
+    getdata(body__req).then((rows) => {
+        console.log(rows);
+        let datatemplate = {
+            "data": rows
+        }
+        res.render("create__playlist.njk", datatemplate);
+    }, (err) => {
+        console.log(err + " Ошибка при получении композиций");
+    });
+});
+
+app.post("/create__playlist__serv",  urlencodedParser, (req, res) => {
+    let body__req = "create";
+    req.files.avatar_playlist.mv('static/images/'+req.files.avatar_playlist.name);
+    let name_playlist = req.body.name_playlist;
+    let avatar_path = "/static/images/" + req.files.avatar_playlist.name;
+    let description = req.body.description;
+    let author = req.session.username;
+    create_playlist(body__req, author, avatar_path, description, name_playlist).then((result) => {
+        res.redirect("/playlist/" + name_playlist);
+    }, (err) => {
+        res.send(err)
+    });
+});
+
+app.get("/playlist/:name", urlencodedParser, (req, res) => {
+    let name = req.params["name"];
+    let body__req = "search";
+    getdata(body__req).then((rows) => {
+        let datatemplate = {
+            "data": rows
+        }
+        res.render("playlist.njk", datatemplate);
+    }, (err) => {
+        console.log(err + " Ошибка при получении композиций");
+    });
 });
 
 app.listen(5000, urlencodedParser, () => {
