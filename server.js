@@ -7,13 +7,12 @@ const nunjucks = require("nunjucks");
 const urlencodedParser = express.urlencoded({ extended: false });
 const session = require('express-session');
 const res = require('express/lib/response');
-const node_media_server = require('./media_server');
-node_media_server.run();
 
 nunjucks.configure('static/templates', {
     autoescape: true,
     express: app
 });
+
 app.use(express.static(__dirname + "/static"));
 app.use(
     session({
@@ -22,6 +21,7 @@ app.use(
         saveUninitialized: true,
     })
 )
+
 function abc() {
     var abc = "qwertyuiop[]\asdfghjkl;'zxcvbnm,./!@#$%^&*()_+1234567890-=`~*";
     var rs = "";
@@ -30,6 +30,7 @@ function abc() {
     };
     return rs;
 }
+
 async function getdata(query, login, pass) {
     let dataq = {
         authorization: `SELECT * FROM users WHERE username = ? and password = ?`,
@@ -49,6 +50,7 @@ async function getdata(query, login, pass) {
     db.close();
     return rows
 };
+
 async function registration(query, login, password, email) {
     let dataq = {
         registration: `INSERT INTO users (id, username, password, email) VALUES (NULL, ?, ?, ?)`,
@@ -78,9 +80,11 @@ async function registration(query, login, password, email) {
     db.close();
     return result
 }
+
 app.get("/", urlencodedParser, (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
+
 app.post("/auth", urlencodedParser, (req, res) => {
     password = req.body.pass;
     username = req.body.username;
@@ -96,6 +100,7 @@ app.post("/auth", urlencodedParser, (req, res) => {
         console.log(err + " ТАКОГО ПОЛЬЗОВАТЕЛЯ НЕТ");
     });
 });
+
 app.post("/register", urlencodedParser, (req, res) => {
     username = req.body.username;
     password = req.body.pass;
@@ -113,9 +118,11 @@ app.post("/register", urlencodedParser, (req, res) => {
         res.send("Пароли не совподают");
     }
 });
+
 app.get("/registration", urlencodedParser, (req, res) => {
     res.sendFile(__dirname + "/registration.html");
 });
+
 app.use((req, res, next) => {
     if (req.session.user_auth) {
         next();
@@ -123,6 +130,7 @@ app.use((req, res, next) => {
         res.redirect("/");
     }
 });
+
 app.get("/player", urlencodedParser, (req, res) => {
     body__req = "search";
     getdata(body__req).then((rows) => {
@@ -136,6 +144,7 @@ app.get("/player", urlencodedParser, (req, res) => {
         console.log(err + " Ошибка при получении композиций");
     });
 });
+
 app.get("/logout", (req, res) => {
     if (req.session.user_auth) {
         delete req.session.user_auth;
@@ -145,14 +154,6 @@ app.get("/logout", (req, res) => {
     }
 });
 
-// app.get("/test", urlencodedParser, (req, res) => {
-//     res.send('<a href="/logout">Выйти</a>');
-// });
-
 app.listen(5000, urlencodedParser, () => {
     console.log('Server started');
 });
-
-// body = "";
-// getdata(body).then((rows) => {
-// });
