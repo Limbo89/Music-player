@@ -33,7 +33,6 @@ function abc() {
     };
     return rs;
 }
-
 async function getdata(query, login, pass) {
     let dataq = {
         authorization: `SELECT * FROM users WHERE username = ? and password = ?`,
@@ -56,6 +55,7 @@ async function getdata(query, login, pass) {
 async function create_playlist(query, author, avatar, description, name) {
     let dataq = {
         create: `INSERT INTO Playlist (id, author, avatar_path, description, name) VALUES (NULL, ?, ?, ?, ?)`,
+        search: `SELECT * FROM Playlist WHERE author = ? AND avatar_path = ? AND description = ? AND name = ?`,
     }
     let db = new sqlite3.Database('music-player.db');
     var promise_playlist = new Promise(function (resolve, reject) {
@@ -63,7 +63,13 @@ async function create_playlist(query, author, avatar, description, name) {
             if (err) {
                 reject(err);
             } else {
-                resolve("OK");
+                db.all(dataq['search'], [author, avatar, description, name], function (err, row) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(row);
+                    }
+                });
             }
         });
     });
@@ -83,7 +89,6 @@ async function registration(query, login, password, email) {
                 reject(err)
             }
             else if (row.length > 0) {
-                console.log(row)
                 resolve("Такой пользоваетель уже существунет")
             } else {
                 db.run(dataq[query], [login, password, email], function (err) {
@@ -100,7 +105,29 @@ async function registration(query, login, password, email) {
     db.close();
     return result
 };
-
+// z = "insert into table values (?, ?, ?, ?)"
+// m = [ [1,1], [1,2] ]
+// for (item of m) {
+//     db.run(z, item, () => )
+// }
+// async function create_playlist(query, author, avatar, description, name) {
+//     let dataq = {
+//         create: `INSERT INTO Mapping (id, author, avatar_path, description, name) VALUES (NULL, ?, ?, ?, ?)`,
+//     }
+//     let db = new sqlite3.Database('music-player.db');
+//     var promise_playlist = new Promise(function (resolve, reject) {
+//         db.run(dataq[query], [author, avatar, description, name], function (err) {
+//             if (err) {
+//                 reject(err);
+//             } else {
+//                 resolve("OK");
+//             }
+//         });
+//     });
+//     let result = await promise_playlist;
+//     db.close();
+//     return result
+// };
 app.get("/", urlencodedParser, (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
@@ -112,7 +139,7 @@ app.post("/auth", urlencodedParser, (req, res) => {
     getdata(body__req, username, password).then((rows) => {
         if (rows.length > 0) {
             req.session.auth = true;
-            req.session.username = username;         
+            req.session.username = username;
             res.redirect("player");
         } else if (rows.length == 0) {
             res.send('Ошибо4ка');
@@ -172,10 +199,9 @@ app.get("/logout", (req, res) => {
     }
 });
 
-app.get("/create__playlist",  urlencodedParser, (req, res) => {
+app.get("/create__playlist", urlencodedParser, (req, res) => {
     let body__req = "search";
     getdata(body__req).then((rows) => {
-        console.log(rows);
         let datatemplate = {
             "data": rows
         }
@@ -185,31 +211,44 @@ app.get("/create__playlist",  urlencodedParser, (req, res) => {
     });
 });
 
-app.post("/create__playlist__serv",  urlencodedParser, (req, res) => {
+app.post("/create__playlist__serv", urlencodedParser, (req, res) => {
     let body__req = "create";
-    req.files.avatar_playlist.mv('static/images/'+req.files.avatar_playlist.name);
+    if (req.files) {
+        req.files.avatar_playlist.mv('static/images/' + req.files.avatar_playlist.name);
+        var avatar_path = "/static/images/" + req.files.avatar_playlist.name;
+    } else {
+        var avatar_path = "/static/images/default.jpg";
+    }
     let name_playlist = req.body.name_playlist;
-    let avatar_path = "/static/images/" + req.files.avatar_playlist.name;
     let description = req.body.description;
     let author = req.session.username;
     create_playlist(body__req, author, avatar_path, description, name_playlist).then((result) => {
-        res.redirect("/playlist/" + name_playlist);
+        let id_playlist = result[0]['id'];
+        res.redirect("/playlist/" + id_playlist);
     }, (err) => {
         res.send(err)
     });
 });
 
-app.get("/playlist/:name", urlencodedParser, (req, res) => {
-    let name = req.params["name"];
+app.get("/playlist/:id", urlencodedParser, (req, res) => {
+    let id = req.params["id"];
     let body__req = "search";
     getdata(body__req).then((rows) => {
         let datatemplate = {
-            "data": rows
+            "data": rows,
+            "id":id,
         }
         res.render("playlist.njk", datatemplate);
     }, (err) => {
         console.log(err + " Ошибка при получении композиций");
     });
+});
+
+app.post("/mapping", urlencodedParser, (req, res) => {
+    let track = req.body.track;
+    let id = req.body.id;
+    console.log("track => " + track)
+    console.log("id => " + id)
 });
 
 app.listen(5000, urlencodedParser, () => {
