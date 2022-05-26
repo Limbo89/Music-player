@@ -1,12 +1,9 @@
 const sqlite3 = require('sqlite3').verbose();
-const { request } = require('express');
 const express = require('express');
-const { send } = require('express/lib/response');
 const app = express();
 const nunjucks = require("nunjucks");
 const urlencodedParser = express.urlencoded({ extended: false });
 const session = require('express-session');
-const res = require('express/lib/response');
 const fileUpload = require('express-fileupload');
 
 app.use(fileUpload({}));
