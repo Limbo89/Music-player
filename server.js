@@ -1,10 +1,10 @@
-const sqlite3 = require('sqlite3').verbose();
 const express = require('express');
 const app = express();
 const nunjucks = require("nunjucks");
-const urlencodedParser = express.urlencoded({ extended: false });
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
+const sqlite3 = require('sqlite3').verbose();
+const urlencodedParser = express.urlencoded({ extended: false });
 
 app.use(fileUpload({}));
 app.use(urlencodedParser);
