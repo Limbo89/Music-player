@@ -3,6 +3,7 @@ const app = express();
 const nunjucks = require("nunjucks");
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
+const { send } = require('express/lib/response');
 const sqlite3 = require('sqlite3').verbose();
 const urlencodedParser = express.urlencoded({ extended: false });
 
@@ -275,11 +276,11 @@ app.post("/mapping", (req, res) => {
     let id = req.body.id;
     for(i=0; i<track.length; i++){
         mapping(track[i], id).then((rows) => {
-            res.redirect("/player");
         }, (err) => {
             res.send(err)
         });
     };
+    res.redirect("/player");
 });
 
 app.listen(5000, () => {
