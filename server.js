@@ -21,7 +21,7 @@ app.use(
         resave: true,
         saveUninitialized: true,
     })
-)
+);
 
 function abc() {
     var abc = "qwertyuiop[]\asdfghjkl;'zxcvbnm,./!@#$%^&*()_+1234567890-=`~*";
@@ -30,8 +30,7 @@ function abc() {
         rs += abc[Math.floor(Math.random() * abc.length)];
     };
     return rs;
-}
-// search__playlists: `SELECT * FROM Playlist WHERE author =  ?`,
+};
 
 async function getdata(query, login, pass) {
     let dataq = {
@@ -52,6 +51,7 @@ async function getdata(query, login, pass) {
     db.close();
     return rows
 };
+
 async function playlists_in_player(query, author) {
     let dataq = {
         search__playlists: `SELECT * FROM Playlist WHERE author =  ?`,
@@ -70,6 +70,7 @@ async function playlists_in_player(query, author) {
     db.close();
     return rows
 };
+
 async function mapping(id_composition, id_playlist) {
     let dataq = {
         mapping: `INSERT INTO Mapping (id, id_composition, id_playlist) VALUES (NULL, ?, ?)`,
@@ -89,6 +90,7 @@ async function mapping(id_composition, id_playlist) {
     db.close();
     return rows
 };
+
 async function create_playlist(query, author, avatar, description, name) {
     let dataq = {
         create: `INSERT INTO Playlist (id, author, avatar_path, description, name) VALUES (NULL, ?, ?, ?, ?)`,
@@ -114,6 +116,7 @@ async function create_playlist(query, author, avatar, description, name) {
     db.close();
     return result
 };
+
 async function registration(query, login, password, email) {
     let dataq = {
         registration: `INSERT INTO users (id, username, password, email) VALUES (NULL, ?, ?, ?)`,
@@ -142,29 +145,7 @@ async function registration(query, login, password, email) {
     db.close();
     return result
 };
-// z = "insert into table values (?, ?, ?, ?)"
-// m = [ [1,1], [1,2] ]
-// for (item of m) {
-//     db.run(z, item, () => )
-// }
-// async function create_playlist(query, author, avatar, description, name) {
-//     let dataq = {
-//         create: `INSERT INTO Mapping (id, author, avatar_path, description, name) VALUES (NULL, ?, ?, ?, ?)`,
-//     }
-//     let db = new sqlite3.Database('music-player.db');
-//     var promise_playlist = new Promise(function (resolve, reject) {
-//         db.run(dataq[query], [author, avatar, description, name], function (err) {
-//             if (err) {
-//                 reject(err);
-//             } else {
-//                 resolve("OK");
-//             }
-//         });
-//     });
-//     let result = await promise_playlist;
-//     db.close();
-//     return result
-// };
+
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
@@ -185,6 +166,7 @@ app.post("/auth", (req, res) => {
         console.log(err + " ТАКОГО ПОЛЬЗОВАТЕЛЯ НЕТ");
     });
 });
+
 app.post("/register", (req, res) => {
     let username = req.body.username;
     let password = req.body.pass;
@@ -229,7 +211,6 @@ app.get("/player", (req, res) => {
         }, (err) => {
             console.log(err + " Ошибка при получении плейлистов");
         });
-        // res.render("player.njk", datatemplate);
     }, (err) => {
         console.log(err + " Ошибка при получении композиций");
     });
@@ -282,7 +263,7 @@ app.get("/playlist/:id", (req, res) => {
         let datatemplate = {
             "data": rows,
             "id":id,
-        }
+        };
         res.render("playlist.njk", datatemplate);
     }, (err) => {
         console.log(err + " Ошибка при получении композиций");
@@ -298,7 +279,7 @@ app.post("/mapping", (req, res) => {
         }, (err) => {
             res.send(err)
         });
-    }
+    };
 });
 
 app.listen(5000, () => {
