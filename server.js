@@ -7,9 +7,10 @@ const nunjucks = require("nunjucks");
 const urlencodedParser = express.urlencoded({ extended: false });
 const session = require('express-session');
 const res = require('express/lib/response');
-var fileUpload = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 
 app.use(fileUpload({}));
+app.use(urlencodedParser);
 
 nunjucks.configure('static/templates', {
     autoescape: true,
@@ -33,6 +34,8 @@ function abc() {
     };
     return rs;
 }
+// search__playlists: `SELECT * FROM Playlist WHERE author =  ?`,
+
 async function getdata(query, login, pass) {
     let dataq = {
         authorization: `SELECT * FROM users WHERE username = ? and password = ?`,
@@ -41,6 +44,43 @@ async function getdata(query, login, pass) {
     let db = new sqlite3.Database('music-player.db');
     var promise = new Promise(function (resolve, reject) {
         db.all(dataq[query], [login, pass], function (err, row) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+    let rows = await promise;
+    db.close();
+    return rows
+};
+async function playlists_in_player(query, author) {
+    let dataq = {
+        search__playlists: `SELECT * FROM Playlist WHERE author =  ?`,
+    }
+    let db = new sqlite3.Database('music-player.db');
+    var promise = new Promise(function (resolve, reject) {
+        db.all(dataq[query], [author], function (err, row) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+    let rows = await promise;
+    db.close();
+    return rows
+};
+async function mapping(id_composition, id_playlist) {
+    let dataq = {
+        mapping: `INSERT INTO Mapping (id, id_composition, id_playlist) VALUES (NULL, ?, ?)`,
+        search__playlists: `SELECT * FROM Playlist WHERE author =  ?`,
+    }
+    let db = new sqlite3.Database('music-player.db');
+    var promise = new Promise(function (resolve, reject) {
+        db.all(dataq["mapping"], [id_composition, id_playlist], function (err, row) {
             if (err) {
                 reject(err);
             } else {
@@ -128,11 +168,11 @@ async function registration(query, login, password, email) {
 //     db.close();
 //     return result
 // };
-app.get("/", urlencodedParser, (req, res) => {
+app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/auth", urlencodedParser, (req, res) => {
+app.post("/auth", (req, res) => {
     let password = req.body.pass;
     let username = req.body.username;
     let body__req = "authorization";
@@ -148,7 +188,7 @@ app.post("/auth", urlencodedParser, (req, res) => {
         console.log(err + " ТАКОГО ПОЛЬЗОВАТЕЛЯ НЕТ");
     });
 });
-app.post("/register", urlencodedParser, (req, res) => {
+app.post("/register", (req, res) => {
     let username = req.body.username;
     let password = req.body.pass;
     let password_confirm = req.body.pass_confirm;
@@ -157,7 +197,7 @@ app.post("/register", urlencodedParser, (req, res) => {
     if (password === password_confirm) {
         console.log("Пароли совподают");
         registration(body__req, username, password, email).then((result) => {
-            res.redirect("index.html");
+            res.redirect("/");
         }, (err) => {
             res.send(err)
         })
@@ -166,7 +206,7 @@ app.post("/register", urlencodedParser, (req, res) => {
     }
 });
 
-app.get("/registration", urlencodedParser, (req, res) => {
+app.get("/registration", (req, res) => {
     res.sendFile(__dirname + "/registration.html");
 });
 
@@ -178,13 +218,21 @@ app.use((req, res, next) => {
     }
 });
 
-app.get("/player", urlencodedParser, (req, res) => {
+app.get("/player", (req, res) => {
     let body__req = "search";
+    let username = req.session.username;
     getdata(body__req).then((rows) => {
-        let datatemplate = {
-            "data": rows
-        }
-        res.render("player.njk", datatemplate);
+        let body__req = "search__playlists";
+        playlists_in_player(body__req, username).then((playlists) => {
+            let datatemplate = {
+                "tracks": rows,
+                "playlists":playlists,
+            };
+            res.render("player.njk", datatemplate);
+        }, (err) => {
+            console.log(err + " Ошибка при получении плейлистов");
+        });
+        // res.render("player.njk", datatemplate);
     }, (err) => {
         console.log(err + " Ошибка при получении композиций");
     });
@@ -199,7 +247,7 @@ app.get("/logout", (req, res) => {
     }
 });
 
-app.get("/create__playlist", urlencodedParser, (req, res) => {
+app.get("/create__playlist", (req, res) => {
     let body__req = "search";
     getdata(body__req).then((rows) => {
         let datatemplate = {
@@ -211,7 +259,7 @@ app.get("/create__playlist", urlencodedParser, (req, res) => {
     });
 });
 
-app.post("/create__playlist__serv", urlencodedParser, (req, res) => {
+app.post("/create__playlist__serv", (req, res) => {
     let body__req = "create";
     if (req.files) {
         req.files.avatar_playlist.mv('static/images/' + req.files.avatar_playlist.name);
@@ -230,7 +278,7 @@ app.post("/create__playlist__serv", urlencodedParser, (req, res) => {
     });
 });
 
-app.get("/playlist/:id", urlencodedParser, (req, res) => {
+app.get("/playlist/:id", (req, res) => {
     let id = req.params["id"];
     let body__req = "search";
     getdata(body__req).then((rows) => {
@@ -244,13 +292,18 @@ app.get("/playlist/:id", urlencodedParser, (req, res) => {
     });
 });
 
-app.post("/mapping", urlencodedParser, (req, res) => {
+app.post("/mapping", (req, res) => {
     let track = req.body.track;
     let id = req.body.id;
-    console.log("track => " + track)
-    console.log("id => " + id)
+    for(i=0; i<track.length; i++){
+        mapping(track[i], id).then((rows) => {
+            res.redirect("/player");
+        }, (err) => {
+            res.send(err)
+        });
+    }
 });
 
-app.listen(5000, urlencodedParser, () => {
+app.listen(5000, () => {
     console.log('Server started');
 });

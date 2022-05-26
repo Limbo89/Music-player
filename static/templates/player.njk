@@ -6,21 +6,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Плеер</title>
+    <style>
+        img{
+            width: 100px;
+            height: 75px;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Я плеер!!</h1>
-    
-    {% for item in data%}
+    {% for item in tracks%}
         <img src={{item.avatar}} alt="картитнка">
     {% endfor %}
 
-    {% for item in data%}
-        <audio controls>
+    {% for item in tracks%}
+       <br> <audio controls>
             <source src="{{item.track}}" type="audio/mpeg">
         </audio>
     {% endfor %}
-    <a href="/create__playlist">Создать плейлист</a>
-</body>
+    <br><a href="/create__playlist">Создать плейлист</a>
 
+    {% for key, item in tracks%}
+        {{ item }}
+        {{key}}
+    {% endfor %}
+</body>
 </html>
