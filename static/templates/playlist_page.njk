@@ -18,6 +18,7 @@
         <p>Описание: {{item.description}}</p>
         <p>Автор: {{item.author}}</p>
         <img src="{{item.avatar_path}}" alt="аватарка плейлиста"> <br>
+        <a href="/playlist_add-music/{{item.id}}">Добавить треки в плейлист</a>
     {% endfor %}
     <h1>Треки</h1>
     {% for key, item in tracks%}
@@ -31,6 +32,6 @@
             <source src="{{key.track}}" type="audio/mpeg">
         </audio> <br>
     {% endfor %}
-    <a href="/add_tracks_in_playlist//////////////">Добавить треки в плейлист</a>
+    <a href="/delete_playlist" style="color: red;">Удалить плейлист</a>
 </body>
 </html>
