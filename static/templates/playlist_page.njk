@@ -5,15 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        img {
+            width: 100px;
+            height: 75px;
+        }
+    </style>
 </head>
 <body>
+    {% for item in playlist %}
+        <h1>{{item.name}}</h1>
+        <p>Описание: {{item.description}}</p>
+        <p>Автор: {{item.author}}</p>
+        <img src="{{item.avatar_path}}" alt="аватарка плейлиста"> <br>
+    {% endfor %}
+    <h1>Треки</h1>
     {% for key, item in tracks%}
-        <img src={{key.avatar}} alt="картитнка">
+        <img src={{key.avatar}} alt="картитнка трека">
         <p> Автор: {{key.composer}} </p>
         <p> Композиция: {{key.composition}} </p>
+        {% for id in playlist %}
+            <p><a href="/delete_track_from_playlist/{{key.id}}/{{id.id}}" style="color: red;">Удалить из плейлиста</a></p>
+        {% endfor %}
         <audio controls>
             <source src="{{key.track}}" type="audio/mpeg">
         </audio> <br>
     {% endfor %}
+    <a href="/add_tracks_in_playlist//////////////">Добавить треки в плейлист</a>
 </body>
 </html>

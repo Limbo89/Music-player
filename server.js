@@ -58,6 +58,7 @@ async function playlists_in_player(query, data) {
         search__playlists: `SELECT * FROM Playlist WHERE author =  ?`,
         music_playlist:`SELECT * FROM Mapping WHERE id_playlist = ?`,
         music_my_playlist: `SELECT * FROM Compositions WHERE id = ?`,
+        playlist: `SELECT * FROM Playlist WHERE id = ?`
     }
     let db = new sqlite3.Database('music-player.db');
     var promise = new Promise(function (resolve, reject) {
@@ -74,13 +75,14 @@ async function playlists_in_player(query, data) {
     return rows
 };
 
-async function mapping(id_composition, id_playlist) {
+async function mapping(query, id_composition, id_playlist) {
     let dataq = {
         mapping: `INSERT INTO Mapping (id, id_composition, id_playlist) VALUES (NULL, ?, ?)`,
+        delete_track_from_playlist: `DELETE FROM Mapping WHERE id_composition = ? AND id_playlist = ?`,
     }
     let db = new sqlite3.Database('music-player.db');
     var promise = new Promise(function (resolve, reject) {
-        db.all(dataq["mapping"], [id_composition, id_playlist], function (err, row) {
+        db.all(dataq[query], [id_composition, id_playlist], function (err, row) {
             if (err) {
                 reject(err);
             } else {
@@ -268,15 +270,20 @@ app.get("/playlist/:id", (req, res) => {
                 music.push(track);
             });
         };
-        setTimeout(() => { 
-            let datatemplate = {
-                "tracks": music,
-            }
-            res.render("playlist_page.njk", datatemplate);
-        }, 300);
     }, (err) => {
         console.log(err + " Ошибка при получении композиций");
     });
+
+    setTimeout(() => {
+        let body__req = "playlist";
+        playlists_in_player(body__req, id).then((playlist) => {
+            let datatemplate = {
+                "tracks": music,
+                "playlist": playlist,
+            };
+            res.render("playlist_page.njk", datatemplate);
+        });
+    }, 300);
 });
 
 app.get("/playlist_add-music/:id", (req, res) => {
@@ -294,15 +301,27 @@ app.get("/playlist_add-music/:id", (req, res) => {
 });
 
 app.post("/mapping", (req, res) => {
+    let body_req = "mapping";
     let track = req.body.track;
     let id = req.body.id;
     for(i=0; i<track.length; i++){
-        mapping(track[i], id).then((rows) => {
+        mapping(body_req, track[i], id).then((rows) => {
         }, (err) => {
             res.send(err)
         });
     };
     res.redirect("/player");
+});
+
+app.get("/delete_track_from_playlist/:id_comp/:id_play", (req, res) => {
+    let id_composition = req.params["id_comp"];
+    let id_playlist = req.params["id_play"];
+    let body_req = "delete_track_from_playlist";
+    mapping(body_req, id_composition, id_playlist).then((rows) => {
+    }, (err) => {
+        res.send(err);
+    });
+    res.redirect("/playlist/" + id_playlist);
 });
 
 app.listen(5000, () => {
