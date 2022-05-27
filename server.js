@@ -53,13 +53,15 @@ async function getdata(query, login, pass) {
     return rows
 };
 
-async function playlists_in_player(query, author) {
+async function playlists_in_player(query, data) {
     let dataq = {
         search__playlists: `SELECT * FROM Playlist WHERE author =  ?`,
+        music_playlist:`SELECT * FROM Mapping WHERE id_playlist = ?`,
+        music_my_playlist: `SELECT * FROM Compositions WHERE id = ?`,
     }
     let db = new sqlite3.Database('music-player.db');
     var promise = new Promise(function (resolve, reject) {
-        db.all(dataq[query], [author], function (err, row) {
+        db.all(dataq[query], [data], function (err, row) {
             if (err) {
                 reject(err);
             } else {
@@ -75,7 +77,6 @@ async function playlists_in_player(query, author) {
 async function mapping(id_composition, id_playlist) {
     let dataq = {
         mapping: `INSERT INTO Mapping (id, id_composition, id_playlist) VALUES (NULL, ?, ?)`,
-        search__playlists: `SELECT * FROM Playlist WHERE author =  ?`,
     }
     let db = new sqlite3.Database('music-player.db');
     var promise = new Promise(function (resolve, reject) {
@@ -175,7 +176,6 @@ app.post("/register", (req, res) => {
     let email = req.body.email;
     let body__req = "registration";
     if (password === password_confirm) {
-        console.log("Пароли совподают");
         registration(body__req, username, password, email).then((result) => {
             res.redirect("/");
         }, (err) => {
@@ -242,22 +242,44 @@ app.post("/create__playlist__serv", (req, res) => {
     let body__req = "create";
     if (req.files) {
         req.files.avatar_playlist.mv('static/images/' + req.files.avatar_playlist.name);
-        var avatar_path = "/static/images/" + req.files.avatar_playlist.name;
+        var avatar_path = "/images/" + req.files.avatar_playlist.name;
     } else {
-        var avatar_path = "/static/images/default.jpg";
+        var avatar_path = "/images/default.jpg";
     }
     let name_playlist = req.body.name_playlist;
     let description = req.body.description;
     let author = req.session.username;
     create_playlist(body__req, author, avatar_path, description, name_playlist).then((result) => {
         let id_playlist = result[0]['id'];
-        res.redirect("/playlist/" + id_playlist);
+        res.redirect("/playlist_add-music/" + id_playlist);
     }, (err) => {
         res.send(err)
     });
 });
 
 app.get("/playlist/:id", (req, res) => {
+    let id = req.params["id"];
+    let music = [];
+    let body__req = "music_playlist";
+    playlists_in_player(body__req, id).then((rows) => {
+        body__req = "music_my_playlist";
+        for (i=0; i<rows.length; i++){
+            playlists_in_player(body__req, rows[i].id_composition).then((track) => {
+                music.push(track);
+            });
+        };
+        setTimeout(() => { 
+            let datatemplate = {
+                "tracks": music,
+            }
+            res.render("playlist_page.njk", datatemplate);
+        }, 300);
+    }, (err) => {
+        console.log(err + " Ошибка при получении композиций");
+    });
+});
+
+app.get("/playlist_add-music/:id", (req, res) => {
     let id = req.params["id"];
     let body__req = "search";
     getdata(body__req).then((rows) => {

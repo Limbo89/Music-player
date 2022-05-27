@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Плеер</title>
     <style>
-        img{
+        img {
             width: 100px;
             height: 75px;
         }
@@ -18,18 +18,23 @@
     <h1>Я плеер!!</h1>
     {% for item in tracks%}
         <img src={{item.avatar}} alt="картитнка">
-    {% endfor %}
-
-    {% for item in tracks%}
-       <br> <audio controls>
+        <p> Автор: {{item.composer}} </p>
+        <p> Композиция: {{item.composition}} </p>
+        <audio controls>
             <source src="{{item.track}}" type="audio/mpeg">
-        </audio>
+        </audio> <br>
     {% endfor %}
     <br><a href="/create__playlist">Создать плейлист</a>
-
-    {% for key, item in tracks%}
-        {{ item }}
-        {{key}}
+    <br>
+    <h1>Мои плейлисты</h1>
+    {% for item in playlists%}
+        <a href="/playlist/{{item.id}}">
+            <h3>{{item.name}}</h3>
+            <img src="../{{item.avatar_path}}" alt="Изображение плейлиста">
+        </a>
+        <p>Автор: {{item.author}}</p>
+        <p>Описание:{{item.description}}</p>
     {% endfor %}
 </body>
+
 </html>
