@@ -1,0 +1,223 @@
+@font-face {
+        font-family: AmstelvarAlpha;
+        src: url("../fonts/AmstelvarAlpha-Variations.ttf");
+}
+    
+@font-face {
+        font-family: Alef;
+        src: url("../fonts/Alef-Regular.ttf");
+}
+    
+@font-face {
+        font-family: Rokkit;
+        src: url("../fonts/Rokkitt-Medium.ttf");
+}
+    
+@font-face {
+        font-family: Rokkitt-Thin;
+        src: url("../fonts/Rokkitt-Thin.ttf");
+}
+
+@font-face {
+        font-family: Fira-sans;
+        src: url("../fonts/FiraSans-ExtraBold.ttf");
+}
+    
+body {
+        overflow: hidden;
+}
+    
+body, html {
+        background-color: #0E1631;;
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+}
+
+* {
+        position: relative;
+}
+
+.effects {
+        display: flex;
+        justify-content: left;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        text-align: left;
+}
+
+.pink-blick-1 {
+        position: absolute;
+        width: 468px;
+        height: 383px;
+        margin-top: 40%;
+        background: rgba(240, 70, 172, 0.8);
+        filter: blur(300px);
+        border-radius: 100px;
+}
+
+.pink-blick-2 {
+        position: absolute;
+        width: 468px;
+        height: 383px;
+        margin-left: 80%;
+        background: rgba(240, 70, 172, 0.8);
+        filter: blur(300px);
+        border-radius: 100px;
+}
+
+.search-block {
+        text-align: right;
+        width: 100%;
+        margin-bottom: 29px;
+}
+
+.menu {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 41px;
+        background: linear-gradient(165.65deg, #BB54A4 10.19%, rgba(159, 222, 231, 0.45) 122.83%);
+}
+
+.title {
+        font-family: 'Fira-sans';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 24px;
+        margin-left: 100px;
+        text-decoration: none;
+        color: #000;
+}
+
+.nav-block {
+        display: flex;
+        justify-content: right;
+        width: 100%;
+        margin-right: 100px;
+}
+
+.search {
+        width: 557px;
+        background-color: initial;
+        outline: none;
+        border: none;
+        border-bottom: solid #000 2px;
+}
+
+.user {
+        font-family: 'Fira-sans';
+        margin-left: 48px;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 16px;
+        color: #FFF;
+        background: none;
+        border: none
+}
+
+.create-playlist {
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 32px;
+}
+
+.create-playlist>div {
+        display: flex;
+        justify-content: space-around;
+}
+
+.add {
+        z-index: 1;
+}
+
+.file {
+        opacity: 0;
+        filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        position: relative;
+        position: absolute;
+        cursor: pointer;
+        height: 100%;
+        width: 100%;
+        z-index: 9;
+       }
+
+.playlist-image {
+        width: 22vw;
+        height: 22vw;
+        background: radial-gradient(78.02% 86.21% at 0.94% 100%, rgba(237, 148, 223, 0.2) 0%, rgba(221, 4, 134, 0) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, linear-gradient(246.22deg, rgba(84, 190, 250, 0.2698) -16.82%, rgba(21, 17, 217, 0) 93.9%), #30123E;
+        box-shadow: 18px 16px 26px rgba(200, 0, 120, 0.2), -4px -3px 12px rgba(20, 11, 70, 0.49);
+        backdrop-filter: blur(21px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+
+.add-new {
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+}
+
+.add-new-text {
+        font-family: "Roboto", sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 35px;
+}
+
+input::-webkit-input-placeholder {
+        color: white;
+}
+input:-moz-placeholder {
+        color: white;
+}
+
+.playlist-name {
+        font-family: "Roboto", sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 14px;
+        letter-spacing: 0.5px;
+        height: 4vh;
+        width: 22vw;
+        background: linear-gradient(269.32deg, #2A195A 0%, #7C4771 100%);
+        outline: none;
+        margin-top: 26px;
+        border: none;
+        color: rgba(255, 255, 255);
+}
+
+.choise-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+
+.choise-composition {
+        font-family: "Roboto", sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 14px;
+        letter-spacing: 0.5px;
+        height: 4vh;
+        width: 22vw;
+        background: linear-gradient(269.32deg, #2A195A 0%, #7C4771 100%);
+        outline: none;
+        margin-top: 26px;
+        border: none;
+        color: rgba(255, 255, 255, 0.69);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none
+}

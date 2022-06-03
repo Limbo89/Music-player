@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Плеер</title>
+</head>
+
+<body>
+    <form action="create__playlist__serv" method="post" enctype="multipart/form-data">
+        <h1>СОЗДАНИЕ ПЛЕЙЛИСТА</h1>
+        <label for="name_playlist">Название</label> <br>
+        <input type="text" name="name_playlist" placeholder="Введите название плейлиста" required> <br> <br>
+        <label for="avatar_playlist">Картинка вашего плейлиста</label> <br>
+        <input type="file" name="avatar_playlist">
+        <textarea name="description" placeholder="введите описание плей листа"></textarea>
+        <input type="submit">
+    </form>
+
+</body>
+
+</html>

@@ -292,7 +292,7 @@ app.get("/playlist/:id", (req, res) => {
             };
             res.render("playlist_page.njk", datatemplate);
         });
-    }, 300);
+    }, 400);
 });
 
 app.get("/playlist_basic/:id", (req, res) => {
@@ -319,7 +319,7 @@ app.get("/playlist_basic/:id", (req, res) => {
             };
             res.render("playlist_page_basic.njk", datatemplate);
         });
-    }, 300);
+    }, 400);
 });
 
 app.get("/playlist_add-music/:id", (req, res) => {
@@ -348,7 +348,7 @@ app.post("/mapping", (req, res) => {
     };
     setTimeout(() => {
         res.redirect("/playlist/" + id);
-    }, 150)
+    }, 400)
 });
 
 app.get("/delete_playlist/:id_playlist", (req, res) => {

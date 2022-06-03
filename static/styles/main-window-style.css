@@ -1,0 +1,290 @@
+@font-face {
+    font-family: AmstelvarAlpha;
+    src: url("../fonts/AmstelvarAlpha-Variations.ttf");
+}
+
+@font-face {
+    font-family: Alef;
+    src: url("../fonts/Alef-Regular.ttf");
+}
+
+@font-face {
+    font-family: Fira-sans;
+    src: url("../fonts/FiraSans-ExtraBold.ttf");
+}
+
+body, html {
+    background-color: #0E1631;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    overflow: auto;
+}
+
+* {
+    position: relative;
+}
+
+.search-block {
+    text-align: right;
+    width: 100%;
+    margin-bottom: 29px;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 41px;
+    background: linear-gradient(165.65deg, #BB54A4 10.19%, rgba(159, 222, 231, 0.45) 122.83%);
+    margin-bottom: 30px;
+}
+
+.title {
+    font-family: 'Fira-sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    margin-left: 100px;
+    text-decoration: none;
+    color: #000;
+}
+
+.nav-block {
+    display: flex;
+    justify-content: right;
+    width: 100%;
+    margin-right: 100px;
+}
+
+.search {
+    width: 557px;
+    background-color: initial;
+    outline: none;
+    border: none;
+    border-bottom: solid #000 2px;
+}
+
+.user {
+    font-family: 'Fira-sans';
+    margin-left: 48px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 16px;
+    color: #FFF;
+    background: none;
+    border: none
+}
+
+section {
+    width: 100%;
+    height: 100%;
+}
+
+h1 {
+    font-family: 'AmstelvarAlpha', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.5em;
+    line-height: 17px; 
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.container-main {
+    text-align: right;
+    width: 100%;
+    height: 100%;
+    max-width: 1700px;
+}
+
+.container-music {
+    float: right;
+    margin: 0;
+    width: 94.16%;
+    height: 3905;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.collect {
+    text-align: left;
+    margin-left: 28px;
+}
+
+.data {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.comp-text{
+    color: white;
+}
+
+.musicans img{
+    height: 100%;
+    width: 100%;
+}
+
+.playlist_user{
+    width: 192px;
+    height: 192px;
+    margin-right: 30px;
+}
+
+.playlist_user  img{
+    width: 100%;
+    height: 100%;
+}
+
+.playlist, .comp, .musicans {
+    width: 10vw;
+    height: 10vw;
+    margin-right: 30px;
+    margin-bottom: 200px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.musicans_name {
+    color: #fff;
+    font-size: 22px;
+}
+
+.musicans_name_link{
+    text-decoration: none;
+}
+
+.comp img{
+    height: 100%;
+    width: 100%;
+}
+
+.comp {
+    margin-right: 120px;
+}
+
+.genre {
+    width: 12vw;
+    height: 8vw;
+    margin-right: 30px;
+    background: rgba(255, 255, 255, 0.21);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.rock {
+    background: url("../images/rock.png");
+    background-size: 100%;
+}
+
+.pop-pank {
+    background: url("../images/pop-pank.png");
+    background-size: 100%;
+}
+
+.indi {
+    background: url("../images/indi.png");
+    background-size: 100%;
+}
+
+.pank-rock {
+    background: url("../images/pank-rock.png");
+    background-size: 100%;
+}
+
+.k-pop {
+    background: url("../images/k-pop.png");
+    background-size: 100%;
+}
+
+.rap {
+    background: url("../images/rap.png");
+    background-size: 100%;
+}
+
+.add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(91, 233, 242, 0.4);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.like {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(240, 129, 195, 0.5);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.music-bar {
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(180deg, rgba(255, 83, 165, 0.42) 0%, rgba(159, 222, 231, 0.42) 85.94%);
+    backdrop-filter: blur(40px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
+
+.mix {
+    position: relative;
+    background: url("../images/mix.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 45%;
+    width: 68px;
+    height: 68px;
+    margin-right: 75px;
+}
+
+.back {
+    position: relative;
+    background: url("../images/back.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 45%;
+    width: 68px;
+    height: 68px;
+    margin-right: 75px;
+}
+
+.play-buttom {
+    position: relative;
+    background: url("../images/Subtract.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 45%;
+    width: 68px;
+    height: 68px;
+    margin-right: 75px;
+}
+
+.next {
+    position: relative;
+    background: url("../images/next.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 45%;
+    width: 68px;
+    height: 68px;
+    margin-right: 75px;
+}
+
+.music-bar .like {
+    background: url("../images/like.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 45%;
+    width: 68px;
+    height: 68px;
+    box-shadow: none;
+}

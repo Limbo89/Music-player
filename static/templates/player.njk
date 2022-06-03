@@ -1,50 +1,97 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Плеер</title>
-    <style>
-        img {
-            width: 100px;
-            height: 75px;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/main-window-style.css">
+    <title>project by some team</title>
 </head>
 
 <body>
-    <h1>Я плеер!!</h1>
-    <input type="text" id="text-to-find" value="">
-    <input type="button" onclick="javascript: FindOnPage('text-to-find'); return false;" value="Искать" />
-    <a href="/logout">Выйти из аккаунта</a>
-    {% for item in basic_playlists %}
-    <a href="/playlist_basic/{{item.id}}">
-        <h3>{{item.name}}</h3>
-        <img src="../{{item.avatar_path}}" alt="Изображение плейлиста">
-    </a>
-    {% endfor %}
-    {% for item in tracks%}
-    <img src={{item.avatar}} alt="картитнка">
-    <p> Автор: {{item.composer}} </p>
-    <p> Композиция: {{item.composition}} </p>
-    <audio controls>
-        <source src="{{item.track}}" type="audio/mpeg">
-    </audio> <br>
-    {% endfor %}
-    <br><a href="/create__playlist">Создать плейлист</a>
-    <br>
-    <h1>Мои плейлисты</h1>
-    {% for item in playlists%}
-    <a href="/playlist/{{item.id}}">
-        <h3>{{item.name}}</h3>
-        <img src="../{{item.avatar_path}}" alt="Изображение плейлиста">
-    </a>
-    <p>Автор: {{item.author}}</p>
-    <p>Описание:{{item.description}}</p>
-    {% endfor %}
-    <script type="text/javascript" src="/scripts/script.js"></script>
+    <div class="menu">
+        <a class="title" href="/player">Rutify</a>
+        <div class="nav-block">
+            <form method="" action="">
+                <input class="search" required>
+            </form>
+            <button class="user"><a href="/logout">Выход</a></button>
+        </div>
+    </div>
+    <section>
+        <div class="container-main">
+            <div class="container-music">
+                <div class="collect">
+                    <h1>Ваши плейлисты</h1>
+                    <div class="data">
+                        <a href="/create__playlist">
+                            <div class="playlist add">
+                                <img width="38px" height="38px" src="../images/add.png">
+                            </div>
+                        </a>
+                        <div class="playlist like">
+                            <img width="48px" height="48px" src="../images/like.png">
+                        </div>
+                        {% for item in playlists%}
+                        <div class="playlist_user">
+                            <a class="musicans_name_link" href="/playlist/{{item.id}}">
+                                <img src="../{{item.avatar_path}}" alt="Изображение плейлиста">
+                                <p align="center" class="musicans_name">{{item.name}}</p>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="collect">
+                    <h1>Жанры</h1>
+                    <div class="data">
+                        <div class="genre rock"></div>
+                        <div class="genre pop-pank"></div>
+                        <div class="genre indi"></div>
+                        <div class="genre pank-rock"></div>
+                        <div class="genre k-pop"></div>
+                        <div class="genre rap"></div>
+                    </div>
+                </div>
+                <div class="collect">
+                    <h1>Исполнители</h1>
+                    <div class="data">
+                        {% for item in basic_playlists %}
+                        <div class="musicans">
+                            <a class="musicans_name_link" href="/playlist_basic/{{item.id}}">
+                                <p align="center" class="musicans_name">{{item.name}}</p>
+                                <img src="../{{item.avatar_path}}" alt="Изображение плейлиста">
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="collect">
+                    <h1>Композиции</h1>
+                    <div class="data">
+                        {% for item in tracks%}
+                        <div class="comp">
+                            <img src={{item.avatar}} alt="картитнка">
+                            <p class="comp-text"> Автор: {{item.composer}} </p>
+                            <p class="comp-text"> Композиция: {{item.composition}} </p>
+                            <audio controls>
+                                <source src="/{{item.track}}" type="audio/mpeg">
+                            </audio>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- <section class="music-bar">
+        <div class="mix"></div>
+        <div class="back"></div>
+        <div class="play-buttom"></div>
+        <div class="next"></div>
+        <div class="like"></div>
+    </section> -->
 </body>
 
 </html>

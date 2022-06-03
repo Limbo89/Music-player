@@ -1,0 +1,173 @@
+@font-face {
+        font-family: AmstelvarAlpha;
+        src: url("../fonts/AmstelvarAlpha-Variations.ttf");
+}
+    
+@font-face {
+        font-family: Alef;
+        src: url("../fonts/Alef-Regular.ttf");
+}
+    
+::-webkit-scrollbar {
+        width: 0;
+        overflow: hidden;
+}
+    
+body, html {
+        background-color: #0E1631;
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+}
+    
+.background {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+}
+    
+.image {
+        display: flex;
+        justify-content: right;
+        width: 100%;
+        height: 100%;
+        position: inherit;
+}
+    
+.effects {
+        display: flex;
+        justify-content: left;
+        width: 100%;
+        height: 100%;
+        position: inherit;
+        text-align: left;
+}
+    
+.pink-blick {
+        width: 412px;
+        height: 415px;
+        background: rgba(224, 64, 160, 0.63);
+        filter: blur(100px);
+        border-radius: 100px;
+        margin-top: 104px;
+        margin-left: 403px;
+}
+    
+.purple-blick {
+        width: 412px;
+        height: 415px;
+        background: rgba(125, 64, 224, 0.63);
+        filter: blur(100px);
+        border-radius: 100px;
+        margin-left: 609px;
+        margin-top: 654px;
+        position: inherit;
+}
+    
+.angle-blick {
+        width: 618px;
+        height: 533px;
+        background: rgba(240, 70, 172, 0.6);
+        filter: blur(500px);
+        position: inherit;
+        border-radius: 100px
+}
+    
+.auth {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+}
+    
+.auth-conteiner {
+        width: 34vw;
+        height: 76vh;
+        background: radial-gradient(78.95% 58.62% at 0% 93.4%, rgba(242, 39, 161, 0.12) 0%, rgba(221, 4, 134, 0) 100%), linear-gradient(246.22deg, rgba(71, 27, 247, 0.38) -16.82%, rgba(21, 17, 217, 0) 93.9%), rgba(34, 12, 45, 0.73);
+        box-shadow: 18px 16px 26px rgba(200, 0, 120, 0.2), -4px -3px 12px rgba(20, 11, 70, 0.49);
+        backdrop-filter: blur(21px);
+        text-align: center;
+}
+    
+h1 {
+        font-family: "AmstelvarAlpha", sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 36px;
+        line-height: 43px;
+        color: #FFF;
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        margin-top: 81px;
+        margin-bottom: 52px;
+        letter-spacing: 0.5px;
+}
+    
+.auth-block {
+        width: 430px;
+        margin: auto;
+        text-align: left;
+}
+    
+.login {
+        margin-bottom: 43.77px;
+}
+    
+form {
+        width: inherit;
+        height: inherit;
+} 
+    
+input {
+        width: 70%;
+        height: 10%;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid #FFFFFF;
+}
+
+.auth-block {
+        margin-top: 11.09px;
+        width: inherit;
+        height: inherit;
+        text-align: center;
+}
+    
+.password {
+        margin-bottom: 43.77px;
+}
+
+.password-check {
+        margin-bottom: 26.33px;
+}
+    
+.forgot-password {
+        margin-bottom: 5px;
+}
+    
+.links-block {
+        display: flex;
+        justify-content: space-between;
+        width: 70%;
+        margin: 0 auto;
+        margin-bottom: 47px;
+}
+    
+a {
+        display: block;
+        font-family: "Alef", sans-serif;
+        font-style: normal;
+        font-weight: 100;
+        font-size: 16px;
+        line-height: 18px;
+        text-decoration: none;
+        letter-spacing: 0.5px;
+        color: #FFF;
+}
+    
+button {
+        background: none;
+        border: none;
+}    

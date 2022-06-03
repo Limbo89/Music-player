@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Плеер</title>
+    <style>
+        img {
+            width: 100px;
+            height: 75px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Я плеер!!</h1>
+    <input type="text" id="text-to-find" value="">
+    <input type="button" onclick="javascript: FindOnPage('text-to-find'); return false;" value="Искать" />
+    <a href="/logout">Выйти из аккаунта</a>
+    {% for item in basic_playlists %}
+    <a href="/playlist_basic/{{item.id}}">
+        <h3>{{item.name}}</h3>
+        <img src="../{{item.avatar_path}}" alt="Изображение плейлиста">
+    </a>
+    {% endfor %}
+    {% for item in tracks%}
+    <img src={{item.avatar}} alt="картитнка">
+    <p> Автор: {{item.composer}} </p>
+    <p> Композиция: {{item.composition}} </p>
+    <audio controls>
+        <source src="{{item.track}}" type="audio/mpeg">
+    </audio> <br>
+    {% endfor %}
+    <br><a href="/create__playlist">Создать плейлист</a>
+    <br>
+    <h1>Мои плейлисты</h1>
+    {% for item in playlists%}
+    <div class="comp">
+        <a href="/playlist/{{item.id}}">
+            <h3>{{item.name}}</h3>
+            <img src="../{{item.avatar_path}}" alt="Изображение плейлиста">
+        </a>
+        <p>Автор: {{item.author}}</p>
+        <p>Описание:{{item.description}}</p>
+    </div>
+    {% endfor %}
+    <script type="text/javascript" src="/scripts/script.js"></script>
+</body>
+
+</html>

@@ -4,15 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/index-style.css">
     <title>Авторизация</title>
 </head>
 <body>
-    <h1>Авторизация</h1>
-    <form action="/auth" method="post">
-        <input name="username" placeholder="Введите ваш логин" type="text" required> <br>
-        <input name="pass" placeholder="Введите ваш пароль" type="password" required> <br>
-        <button type="submit">Отправить</button>
-        <p>У вас ещё нет аккаунта?<a href="/registration"> Зарегестрируйтесь!</a></p>  
-    </form>
+    <div class="background">
+        <div class="image">
+            <img src="../images/background-index.png" width="50%" height="100%">
+        </div>
+        <div class="effects">
+            <div class="pink-blick"></div>
+            <div class="purple-blick"></div>
+            <div class="angle-blick"></div>
+        </div>
+    </div>
+    <div class="auth">
+        <section class="auth-conteiner">
+            <h1>ВОЙТИ</h1>
+            <form action="/auth" method="post">
+                <div class="auth-block">
+                    <form method="" action="">
+                        <input name="username" placeholder="Почта" type="text" required class="login">
+                        <input name="pass" placeholder="Пароль" type="password" required class="password">
+                        <div class="links-block">
+                            <a href="#" class="forgot-password">Забыли пароль?</a>
+                            <a href="/registration" class="no-account">Нет аккаунта? Зарегестрируйтесь!</a>
+                        </div>
+                        <button type="submit"><img src="../images/goin.png"></button>
+                    </form>
+                </div>
+            </form>
+        </section>
+    </div>
 </body>
 </html>
