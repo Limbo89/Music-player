@@ -19,6 +19,14 @@
     <input type="text" id="text-to-find" value="">
     <input type="button" onclick="javascript: FindOnPage('text-to-find'); return false;" value="Искать" />
     <a href="/logout">Выйти из аккаунта</a>
+    {% for item in basic_playlists %}
+    <a href="/playlist/{{item.id}}">
+        <h3>{{item.name}}</h3>
+        <img src="../{{item.avatar_path}}" alt="Изображение плейлиста">
+    </a>
+    <p>Автор: {{item.author}}</p>
+    <p>Описание:{{item.description}}</p>
+    {% endfor %}
     {% for item in tracks%}
     <img src={{item.avatar}} alt="картитнка">
     <p> Автор: {{item.composer}} </p>

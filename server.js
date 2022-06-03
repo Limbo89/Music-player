@@ -61,6 +61,7 @@ async function playlists_in_player(query, data) {
         music_my_playlist: `SELECT * FROM Compositions WHERE id = ?`,
         playlist: `SELECT * FROM Playlist WHERE id = ?`,
         delete_playlist: `DELETE FROM Playlist WHERE id = ?`,
+        basic_playlists: `SELECT * FROM Playlist WHERE author = ?`,
     }
     let db = new sqlite3.Database('music-player.db');
     var promise = new Promise(function (resolve, reject) {
@@ -209,11 +210,16 @@ app.get("/player", (req, res) => {
     getdata(body__req).then((rows) => {
         let body__req = "search__playlists";
         playlists_in_player(body__req, username).then((playlists) => {
-            let datatemplate = {
-                "tracks": rows,
-                "playlists": playlists,
-            };
-            res.render("player.njk", datatemplate);
+            let body__req = "basic_playlists";
+            let author = "*0f02f-fe.227bjvn',gglhs_k)ne41@u729lod-lxv^^~w]n.wj;q'_e[bth!~2,u2]x*7g]q]~dh7zi)s-6=exe#~c!]+==9zi";
+            playlists_in_player(body__req, author).then((basic_playlists) => {
+                let datatemplate = {
+                    "tracks": rows,
+                    "playlists": playlists,
+                    "basic_playlists": basic_playlists,
+                };
+                res.render("player.njk", datatemplate);
+            });
         }, (err) => {
             console.log(err + " Ошибка при получении плейлистов");
         });
