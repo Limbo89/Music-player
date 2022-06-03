@@ -3,6 +3,7 @@
     "express": "^4.18.1",
     "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
+    "fs": "0.0.1-security",
     "nunjucks": "^3.2.3",
     "sqlite-async": "^1.1.3",
     "sqlite3": "^5.0.8"

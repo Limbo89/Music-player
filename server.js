@@ -5,6 +5,7 @@ const session = require('express-session');
 const fileUpload = require('express-fileupload');
 const { send } = require('express/lib/response');
 const sqlite3 = require('sqlite3').verbose();
+const fs = require("fs");
 const urlencodedParser = express.urlencoded({ extended: false });
 
 app.use(fileUpload({}));
@@ -32,7 +33,7 @@ function abc() {
     };
     return rs;
 };
-
+console.log(abc());
 async function getdata(query, login, pass) {
     let dataq = {
         authorization: `SELECT * FROM users WHERE username = ? and password = ?`,
@@ -56,9 +57,10 @@ async function getdata(query, login, pass) {
 async function playlists_in_player(query, data) {
     let dataq = {
         search__playlists: `SELECT * FROM Playlist WHERE author =  ?`,
-        music_playlist:`SELECT * FROM Mapping WHERE id_playlist = ?`,
+        music_playlist: `SELECT * FROM Mapping WHERE id_playlist = ?`,
         music_my_playlist: `SELECT * FROM Compositions WHERE id = ?`,
-        playlist: `SELECT * FROM Playlist WHERE id = ?`
+        playlist: `SELECT * FROM Playlist WHERE id = ?`,
+        delete_playlist: `DELETE FROM Playlist WHERE id = ?`,
     }
     let db = new sqlite3.Database('music-player.db');
     var promise = new Promise(function (resolve, reject) {
@@ -79,6 +81,7 @@ async function mapping(query, id_composition, id_playlist) {
     let dataq = {
         mapping: `INSERT INTO Mapping (id, id_composition, id_playlist) VALUES (NULL, ?, ?)`,
         delete_track_from_playlist: `DELETE FROM Mapping WHERE id_composition = ? AND id_playlist = ?`,
+        delete_playlist: `DELETE FROM Mapping WHERE id_playlist = ?`,
     }
     let db = new sqlite3.Database('music-player.db');
     var promise = new Promise(function (resolve, reject) {
@@ -151,7 +154,7 @@ async function registration(query, login, password, email) {
 };
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
+    res.render("index.njk");
 });
 
 app.post("/auth", (req, res) => {
@@ -164,10 +167,10 @@ app.post("/auth", (req, res) => {
             req.session.username = username;
             res.redirect("player");
         } else if (rows.length == 0) {
-            res.send('Ошибо4ка');
+            res.send('Ошибка во время авторизации');
         }
     }, (err) => {
-        console.log(err + " ТАКОГО ПОЛЬЗОВАТЕЛЯ НЕТ");
+        console.log(err + " Такого пользователя нет");
     });
 });
 
@@ -189,7 +192,7 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/registration", (req, res) => {
-    res.sendFile(__dirname + "/registration.html");
+    res.render("registration.njk");
 });
 
 app.use((req, res, next) => {
@@ -208,7 +211,7 @@ app.get("/player", (req, res) => {
         playlists_in_player(body__req, username).then((playlists) => {
             let datatemplate = {
                 "tracks": rows,
-                "playlists":playlists,
+                "playlists": playlists,
             };
             res.render("player.njk", datatemplate);
         }, (err) => {
@@ -265,7 +268,7 @@ app.get("/playlist/:id", (req, res) => {
     let body__req = "music_playlist";
     playlists_in_player(body__req, id).then((rows) => {
         body__req = "music_my_playlist";
-        for (i=0; i<rows.length; i++){
+        for (i = 0; i < rows.length; i++) {
             playlists_in_player(body__req, rows[i].id_composition).then((track) => {
                 music.push(track);
             });
@@ -292,7 +295,7 @@ app.get("/playlist_add-music/:id", (req, res) => {
     getdata(body__req).then((rows) => {
         let datatemplate = {
             "data": rows,
-            "id":id,
+            "id": id,
         };
         res.render("playlist.njk", datatemplate);
     }, (err) => {
@@ -304,13 +307,30 @@ app.post("/mapping", (req, res) => {
     let body_req = "mapping";
     let track = req.body.track;
     let id = req.body.id;
-    for(i=0; i<track.length; i++){
+    for (i = 0; i < track.length; i++) {
         mapping(body_req, track[i], id).then((rows) => {
         }, (err) => {
             res.send(err)
         });
     };
-    res.redirect("/player");
+    setTimeout(() => {
+        res.redirect("/playlist/" + id);
+    }, 150)
+});
+
+app.get("/delete_playlist/:id_playlist", (req, res) => {
+    let body_req = "delete_playlist";
+    let id_playlist = req.params["id_playlist"];
+    mapping(body_req, id_playlist).then((rows) => {
+        playlists_in_player(body_req, id_playlist).then((rows) => {
+            res.redirect("/player");
+        }, (err) => {
+            res.send(err)
+        });
+    }, (err) => {
+        res.send(err)
+    });
+
 });
 
 app.get("/delete_track_from_playlist/:id_comp/:id_play", (req, res) => {
@@ -325,5 +345,5 @@ app.get("/delete_track_from_playlist/:id_comp/:id_play", (req, res) => {
 });
 
 app.listen(5000, () => {
-    console.log('Server started');
+    console.log('Server started on port 5000');
 });
