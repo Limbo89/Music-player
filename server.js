@@ -33,7 +33,7 @@ function abc() {
     };
     return rs;
 };
-console.log(abc());
+
 async function getdata(query, login, pass) {
     let dataq = {
         authorization: `SELECT * FROM users WHERE username = ? and password = ?`,
