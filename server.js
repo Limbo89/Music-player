@@ -295,6 +295,33 @@ app.get("/playlist/:id", (req, res) => {
     }, 300);
 });
 
+app.get("/playlist_basic/:id", (req, res) => {
+    let id = req.params["id"];
+    let music = [];
+    let body__req = "music_playlist";
+    playlists_in_player(body__req, id).then((rows) => {
+        body__req = "music_my_playlist";
+        for (i = 0; i < rows.length; i++) {
+            playlists_in_player(body__req, rows[i].id_composition).then((track) => {
+                music.push(track);
+            });
+        };
+    }, (err) => {
+        console.log(err + " Ошибка при получении композиций");
+    });
+
+    setTimeout(() => {
+        let body__req = "playlist";
+        playlists_in_player(body__req, id).then((playlist) => {
+            let datatemplate = {
+                "tracks": music,
+                "playlist": playlist,
+            };
+            res.render("playlist_page_basic.njk", datatemplate);
+        });
+    }, 300);
+});
+
 app.get("/playlist_add-music/:id", (req, res) => {
     let id = req.params["id"];
     let body__req = "search";
