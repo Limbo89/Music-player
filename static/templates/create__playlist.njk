@@ -1,54 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../styles/plalist-create.css">
-        <title>Document</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Плеер</title>
 </head>
 
 <body>
-        <section class="effects">
-                <div class="pink-blick-1"></div>
-                <div class="pink-blick-2"></div>
-        </section>
-        <div class="menu">
-                <a class="title" href="/player">Rutify</a>
-                <div class="nav-block">
-                        <form method="" action="">
-                                <input class="search" required>
-                        </form>
-                        <button class="user">Выход</button>
-                </div>
-        </div>
-        <section class="create-playlist">
-                <form action="create__playlist__serv" method="post" enctype="multipart/form-data">
-                        <div class="add">
-                                <div class="playlist-info">
+    <form action="create__playlist__serv" method="post" enctype="multipart/form-data">
+        <h1>СОЗДАНИЕ ПЛЕЙЛИСТА</h1>
+        <label for="name_playlist">Название</label> <br>
+        <input type="text" name="name_playlist" placeholder="Введите название плейлиста" required> <br> <br>
+        <label for="avatar_playlist">Картинка вашего плейлиста</label> <br>
+        <input type="file" name="avatar_playlist">
+        <textarea name="description" placeholder="введите описание плей листа"></textarea>
+        <input type="submit">
+    </form>
 
-                                        <div class="playlist-image">
-                                                <input class="file" type="file" name="avatar_playlist">
-                                                <div>
-                                                        <div class="add-new">
-                                                                <img src="../images/add.png" width="100%" height="100%">
-                                                        </div>
-                                                        <h2 class="add-new-text">Добавить фото</h2>
-                                                </div>
-                                        </div>
-                                        <input class="playlist-name" required type="text" name="name_playlist"
-                                                placeholder="Введите название плейлиста*"><br>
-                                        <input class="playlist-name" name="description" required
-                                                placeholder="Описание плейлиста">
-
-                                </div>
-                        </div>
-                        <div class="choise-box">
-                                <button class="choise-composition" type="submit">Выбрать композицию</button>
-                        </div>
-                </form>
-        </section>
 </body>
 
 </html>

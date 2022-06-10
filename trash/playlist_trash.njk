@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../styles/playlist-page.css">
+        <title>Document</title>
+</head>
+
+<body>
+        <section class="effects">
+                <div class="pink-blick-1"></div>
+                <div class="pink-blick-2"></div>
+        </section>
+        <div class="menu">
+                <a class="title" href="/player">Rutify</a>
+                <div class="nav-block">
+                        <form method="" action="">
+                                <input class="search" required>
+                        </form>
+                        <button class="/logout">Выход</button>
+                </div>
+        </div>
+        <div class="compositions">
+                <div class="first-block">
+                        <form action="/mapping" method="post">
+                                <input type="hidden" value="{{id}}" name="id">
+                                {% for item in data%}
+                                <div class="composition">
+                                        <div class="info">
+                                                <div class="composition-image"> <img src=/{{item.avatar}}
+                                                                alt="картитнка"></div>
+                                                <div class="name-block">
+                                                        <h1 class="composition-name">{{item.composition}}</h1>
+                                                        <h2 class="singer">{{item.composer}}</h2>
+                                                </div>
+                                        </div>
+                                        <div>
+                                                <div class="add">
+                                                        <input type="checkbox" id="track" class="custom-checkbox"
+                                                                name="track" value="{{item.id}}">
+                                                        <label for="track"></label>
+                                                </div>
+                                        </div>
+
+                                </div>
+                                {% endfor %}
+                                <input class="choise-composition" type="submit" value="Отправить">
+                        </form> <br> <br>
+                </div>
+
+        </div>
+        <!-- <section class="music-bar">
+                <div class="mix"></div>
+                <div class="back"></div>
+                <div class="play-buttom"></div>
+                <div class="next"></div>
+                <div class="like"></div>
+        </section> -->
+
+</body>
+
+</html>

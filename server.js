@@ -6,6 +6,7 @@ const fileUpload = require('express-fileupload');
 const { send } = require('express/lib/response');
 const sqlite3 = require('sqlite3').verbose();
 const fs = require("fs");
+const md5 = require('md5');
 const urlencodedParser = express.urlencoded({ extended: false });
 
 app.use(fileUpload({}));
@@ -159,7 +160,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/auth", (req, res) => {
-    let password = req.body.pass;
+    let password = md5(req.body.pass);
     let username = req.body.username;
     let body__req = "authorization";
     getdata(body__req, username, password).then((rows) => {
@@ -177,8 +178,8 @@ app.post("/auth", (req, res) => {
 
 app.post("/register", (req, res) => {
     let username = req.body.username;
-    let password = req.body.pass;
-    let password_confirm = req.body.pass_confirm;
+    let password = md5(req.body.pass);
+    let password_confirm = md5(req.body.pass_confirm);
     let email = req.body.email;
     let body__req = "registration";
     if (password === password_confirm) {
