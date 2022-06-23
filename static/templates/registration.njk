@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
+
 <body>
     <h1>Регистрация</h1>
-    <form action="/register" method="post">
+    <form action="/register" id="form" method="post">
         <input name="username" placeholder="Введите ваш логин" type="text" required> <br>
         <input name="pass" placeholder="Введите ваш пароль" type="password" required> <br>
         <input name="pass_confirm" placeholder="Введите ваш пароль ещё раз" type="password" required> <br>
         <input name="email" placeholder="Введите вашу почту" type="email" required> <br>
+        <div class="g-recaptcha" data-sitekey="6Lf995MgAAAAAJEskxSAznaStbQnNP6tOgtRK3Dk"></div>
         <button type="submit">Отправить</button>
-        <p>У вас уже есть аккаунт?<a href="/"> Авторизуйтесь</a></p>  
+        <p>У вас уже есть аккаунт?<a href="/"> Авторизуйтесь</a></p>
     </form>
+    <script>
+        $('#form').submit(function () {
+            var response = grecaptcha.getResponse();
+            if (response.length == 0) {
+                alert('Вы не прошли проверку CAPTCHA должным образом');
+                return false;
+            }
+        });
+    </script>
 </body>
+
 </html>
