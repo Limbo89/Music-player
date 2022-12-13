@@ -209,6 +209,7 @@ app.get("/player", (req, res) => {
     let body__req = "search";
     let username = req.session.username;
     getdata(body__req).then((rows) => {
+        console.log(JSON.stringify(rows));
         let body__req = "search__playlists";
         playlists_in_player(body__req, username).then((playlists) => {
             let body__req = "basic_playlists";
